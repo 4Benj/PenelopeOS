@@ -16,6 +16,7 @@ bootloader = "0.9" # Maybe i'll write my own bootloader one day, but that day is
 x86_64 = "0.14.2" # For x86_64 architecture
 uart_16550 = "0.2.0" # For serial communication
 pic8259 = "0.10.1" # For programmable interrupt controller
+pc-keyboard = "0.7.0" # For keyboard input
 
 volatile = "0.2.6" # For volatile memory accesss
 lazy_static = { version = "1.4.0", features = ["spin_no_std"] } # For static variables
