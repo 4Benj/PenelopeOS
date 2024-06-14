@@ -1,0 +1,23 @@
+# Penelope OS
+Now written in Rust!
+---
+Penelope OS is a simple operating system written in Rust.
+I decided to make this out of boredom and procrastination from my university exam studies.
+
+I'm not sure how far I'll take this project, but I'll try to make it as good as I can.
+
+This project is inspired by the [Writing an OS in Rust](https://os.phil-opp.com/) blog series by Philipp Oppermann.
+
+Also this is my second Penelope OS project, the first one was being written in C and was also made out of procrastination from last year's university exam studies.
+
+## Building
+To build the project, you need to have the following tools installed:
+- Rust
+- Cargo
+- QEMU (If you want to run the OS in a virtual machine using the `cargo run` command and don't want to modify the `.cargo/config.toml` file to use another emulator)
+
+{Build instructions will be added later}
+
+## Features
+- [x] Booting
+- [x] VGA Buffer Driver
