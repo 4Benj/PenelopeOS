@@ -25,8 +25,7 @@ pub extern "C" fn _start() -> ! {
     test_main();
 
     println!("It did not crash!");
-    // we do nothing here
-    loop {}
+    penelope::hlt_loop();
 }
 
 /**
@@ -36,7 +35,7 @@ pub extern "C" fn _start() -> ! {
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
     println!("{}", _info);
-    loop {}
+    penelope::hlt_loop();
 }
 
 /**
