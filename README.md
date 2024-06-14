@@ -20,3 +20,5 @@ To build the project, you need to have the following tools installed:
 ## Features
 - [x] Booting
 - [x] VGA Buffer Driver
+- [x] Serial Driver
+- [x] CPU Interrupts (Want to rewrite to use without the `x86_64` crate)

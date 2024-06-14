@@ -4,6 +4,8 @@
 #![test_runner(penelope::test_runner)] // set the test runner
 #![reexport_test_harness_main = "test_main"] // rename the test harness function to test_main
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 use core::panic::PanicInfo;
 use penelope::{println};
 /**
@@ -15,7 +17,9 @@ pub extern "C" fn _start() -> ! {
     // this function is the entry point, since the linker looks for a function
     // named `_start` by default
     use core::fmt::Write;
-    println!("Hello World{}", "!");
+    println!("PENELOPE OS {}", VERSION);
+    
+    penelope::init();
     
     #[cfg(test)]
     test_main();
