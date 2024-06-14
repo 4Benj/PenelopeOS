@@ -7,6 +7,10 @@ edition = "2018"
 name = "should_panic"
 harness = false
 
+[[test]]
+name = "stack_overflow"
+harness = false
+
 [dependencies]
 bootloader = "0.9" # Maybe i'll write my own bootloader one day, but that day is not today.
 x86_64 = "0.14.2" # For x86_64 architecture

@@ -20,10 +20,11 @@ pub extern "C" fn _start() -> ! {
     println!("PENELOPE OS {}", VERSION);
     
     penelope::init();
-    
+
     #[cfg(test)]
     test_main();
 
+    println!("It did not crash!");
     // we do nothing here
     loop {}
 }
