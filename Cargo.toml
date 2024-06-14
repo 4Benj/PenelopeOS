@@ -16,3 +16,6 @@ rustflags = ["-C", "link-args=-e __start -static -nostartfiles"]
 
 [dependencies]
 bootloader = "0.9" # Maybe i'll write my own bootloader one day, but that day is not today.
+volatile = "0.2.6" # For volatile memory accesss
+lazy_static = { version = "1.4.0", features = ["spin_no_std"] } # For static variables
+spin = "0.5.2" # For spinlocks
