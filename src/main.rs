@@ -1,27 +1,44 @@
 #![no_std] // don't link the Rust standard library
 #![no_main] // disable all Rust-level entry points
+#![feature(custom_test_frameworks)] // enable custom test frameworks
+#![test_runner(penelope::test_runner)] // set the test runner
+#![reexport_test_harness_main = "test_main"] // rename the test harness function to test_main
 
 use core::panic::PanicInfo;
-
-mod vga_buffer;
-
-/// This function is called on panic.
-#[panic_handler]
-fn panic(_info: &PanicInfo) -> ! {
-    println!("{}", info);
-    loop {}
-}
-
+use penelope::{println};
+/**
+ * The entry point of the OS's kernel.
+ * All Rust code must be called from this function.
+ */
 #[no_mangle] // don't mangle the name of this function
 pub extern "C" fn _start() -> ! {
     // this function is the entry point, since the linker looks for a function
     // named `_start` by default
     use core::fmt::Write;
     println!("Hello World{}", "!");
-    println!("This is a test of the VGA buffer driver{}", "!");
-    print!("on Penelope OS v0.1.0");
-    print!(" written in Rust!");
+    
+    #[cfg(test)]
+    test_main();
 
     // we do nothing here
     loop {}
+}
+
+/**
+ * This function is called on panic.
+ */
+#[cfg(not(test))] // new attribute
+#[panic_handler]
+fn panic(_info: &PanicInfo) -> ! {
+    println!("{}", _info);
+    loop {}
+}
+
+/**
+ * This function is called on panic but only in test mode.
+ */
+#[cfg(test)]
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    penelope::test_panic_handler(info)
 }
