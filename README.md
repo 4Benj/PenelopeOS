@@ -6,9 +6,8 @@ I decided to make this out of boredom and procrastination from my university exa
 
 I'm not sure how far I'll take this project, but I'll try to make it as good as I can.
 
-This project is inspired by the [Writing an OS in Rust](https://os.phil-opp.com/) blog series by Philipp Oppermann.
-
-Also this is my second Penelope OS project, the first one was being written in C and was also made out of procrastination from last year's university exam studies.
+This project is inspired by the [Writing an OS in Rust](https://os.phil-opp.com/) blog series by Philipp Oppermann. 
+Also, this is my second Penelope OS project, the first one was written in C and was also made out of procrastination from last year's university exam studies.
 
 ## Building
 To build the project, you need to have the following tools installed:
