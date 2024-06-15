@@ -20,7 +20,7 @@ entry_point!(kernel_main);
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // this function is the entry point, since the linker looks for a function
     // named `_start` by default
-    use penelope::memory::BootInfoFrameAllocator;
+    use penelope::arch::x86_64::memory::BootInfoFrameAllocator;
 
     println!("PENELOPE OS {}", VERSION);
     penelope::init();

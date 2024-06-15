@@ -10,11 +10,16 @@ use core::panic::PanicInfo;
 #[cfg(test)]
 use bootloader::{entry_point, BootInfo};
 
-pub mod memory;
-pub mod serial;
-pub mod vga_buffer;
-pub mod interrupts;
-pub mod gdt;
+pub mod arch;
+pub mod drivers;
+
+use arch::x86_64::memory;
+use arch::x86_64::interrupts;
+use arch::x86_64::gdt;
+
+use drivers::serial;
+use drivers::vga_buffer;
+
 
 pub trait Testable {
     fn run(&self) -> ();
