@@ -1,6 +1,9 @@
+pub mod bump;
+pub mod linked_list;
+pub mod fixed_size_block;
+
 use alloc::alloc::{GlobalAlloc, Layout};
 use core::ptr::null_mut;
-use linked_list_allocator::LockedHeap;
 use x86_64::{
     structures::paging::{
         mapper::MapToError, FrameAllocator, Mapper, Page, PageTableFlags, Size4KiB,
@@ -13,8 +16,38 @@ use crate::serial_println;
 pub const HEAP_START: usize = 0x_4444_4444_0000;
 pub const HEAP_SIZE: usize = 100 * 1024; // 100 KiB
 
+use fixed_size_block::FixedSizeBlockAllocator;
+
 #[global_allocator]
-static ALLOCATOR: LockedHeap = LockedHeap::empty();
+static ALLOCATOR: Locked<FixedSizeBlockAllocator> = Locked::new(
+    FixedSizeBlockAllocator::new());
+
+/// A wrapper around spin::Mutex to permit trait implementations.
+pub struct Locked<A> {
+    inner: spin::Mutex<A>,
+}
+
+impl<A> Locked<A> {
+    pub const fn new(inner: A) -> Self {
+        Locked {
+            inner: spin::Mutex::new(inner),
+        }
+    }
+
+    pub fn lock(&self) -> spin::MutexGuard<A> {
+        self.inner.lock()
+    }
+}
+
+/// Align the given address `addr` upwards to alignment `align`.
+fn align_up(addr: usize, align: usize) -> usize {
+    let remainder = addr % align;
+    if remainder == 0 {
+        addr // addr already aligned
+    } else {
+        addr - remainder + align
+    }
+}
 
 pub fn init_heap(
     mapper: &mut impl Mapper<Size4KiB>,
@@ -25,7 +58,7 @@ pub fn init_heap(
         let heap_end = heap_start + HEAP_SIZE - 1u64;
         let heap_start_page = Page::containing_address(heap_start);
         let heap_end_page = Page::containing_address(heap_end);
-        serial_println!("[x86_64] Initializing Heap Allocator.\n\r HEAP_START: {:?}\n\r HEAP_END: {:?}\n\r HEAP_START_PAGE: {:?}\n\r HEAP_END_PAGE: {:?}\n", heap_start, heap_end, heap_start_page, heap_end_page);
+        serial_println!("[x86_64] Initializing Heap\n\r HEAP_START: {:?}\n\r HEAP_END: {:?}\n\r HEAP_START_PAGE: {:?}\n\r HEAP_END_PAGE: {:?}\n", heap_start, heap_end, heap_start_page, heap_end_page);
         Page::range_inclusive(heap_start_page, heap_end_page)
     };
 

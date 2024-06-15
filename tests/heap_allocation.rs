@@ -47,7 +47,7 @@ fn simple_allocation() {
 
 #[test_case]
 fn large_vec() {
-    let n = 250;
+    let n = 500;
     let mut vec = Vec::new();
     for i in 0..n {
         vec.push(i);
@@ -61,4 +61,14 @@ fn many_boxes() {
         let x = Box::new(i);
         assert_eq!(*x, i);
     }
+}
+
+#[test_case]
+fn many_boxes_long_lived() {
+    let long_lived = Box::new(1);
+    for i in 0..HEAP_SIZE {
+        let x = Box::new(i);
+        assert_eq!(*x, i);
+    }
+    assert_eq!(*long_lived, 1);
 }

@@ -1,5 +1,6 @@
 #![no_std] // don't link the Rust standard library
 #![no_main] // disable all Rust-level entry points
+#![feature(const_mut_refs)]
 #![feature(custom_test_frameworks)] // enable custom test frameworks
 #![test_runner(penelope::test_runner)] // set the test runner
 #![reexport_test_harness_main = "test_main"] // rename the test harness function to test_main
