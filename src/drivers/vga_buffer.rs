@@ -135,6 +135,10 @@ impl Writer {
             self.buffer.chars[row][col].write(blank);
         }
     }
+
+    pub fn set_color(&mut self, fg_color: Color, bg_color: Color) {
+        self.color_code = ColorCode::new(fg_color, bg_color);
+    }
 }
 
 impl fmt::Write for Writer {

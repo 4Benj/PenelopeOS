@@ -8,7 +8,7 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
-use penelope::{println, shell::shell};
+use penelope::{drivers::vga_buffer::Color, println, shell::shell};
 
 extern crate alloc;
 
@@ -52,10 +52,13 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 /**
  * This function is called on panic.
  */
-#[cfg(not(test))] // new attribute
+#[cfg(not(test))]
 #[panic_handler]
 fn panic(_info: &PanicInfo) -> ! {
+    use penelope::drivers::vga_buffer::WRITER;
+    WRITER.lock().set_color(Color::Red, Color::Black);
     println!("{}", _info);
+    WRITER.lock().set_color(Color::White, Color::Black);
     penelope::hlt_loop();
 }
 
