@@ -12,7 +12,7 @@ name = "stack_overflow"
 harness = false
 
 [dependencies]
-bootloader = "0.9" # Maybe i'll write my own bootloader one day, but that day is not today.
+bootloader = { version = "0.9", features = ["map_physical_memory"] } # Maybe i'll write my own bootloader one day, but that day is not today.
 x86_64 = "0.14.2" # For x86_64 architecture
 uart_16550 = "0.2.0" # For serial communication
 pic8259 = "0.10.1" # For programmable interrupt controller

@@ -7,18 +7,22 @@
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 use core::panic::PanicInfo;
+use bootloader::{BootInfo, entry_point};
+
 use penelope::{println};
+
+entry_point!(kernel_main);
+
 /**
  * The entry point of the OS's kernel.
  * All Rust code must be called from this function.
  */
-#[no_mangle] // don't mangle the name of this function
-pub extern "C" fn _start() -> ! {
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // this function is the entry point, since the linker looks for a function
     // named `_start` by default
-    use core::fmt::Write;
+    use penelope::memory::BootInfoFrameAllocator;
+
     println!("PENELOPE OS {}", VERSION);
-    
     penelope::init();
 
     #[cfg(test)]
