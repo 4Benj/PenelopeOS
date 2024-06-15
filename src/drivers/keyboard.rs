@@ -1,13 +1,15 @@
 use lazy_static::lazy_static;
 use spin::Mutex;
 use pc_keyboard::{layouts, DecodedKey, HandleControl, Keyboard, ScancodeSet1};
-use x86_64::instructions::port::Port;
+use x86_64::instructions::port::{Port, PortGeneric};
 
-use crate::print;
+use crate::serial_println;
 
 lazy_static! {
-    static ref KEYBOARD: Mutex<Keyboard<layouts::Us104Key, ScancodeSet1>> = 
-        Mutex::new(Keyboard::new(ScancodeSet1::new(), layouts::Us104Key, HandleControl::Ignore));
+    static ref KEYBOARD: Mutex<Keyboard<layouts::Us104Key, ScancodeSet1>> = {
+        serial_println!("[Keyboard] Initializing Keyboard with Us104Key and ScancodeSet1");
+        Mutex::new(Keyboard::new(ScancodeSet1::new(), layouts::Us104Key, HandleControl::Ignore))
+    };
 }
 
 const KEY_BUFFER_SIZE: usize = 256;
@@ -27,16 +29,15 @@ pub fn keyboard_interrupt() {
             let mut end = BUFFER_END.lock();
             buffer[*end] = Some(key);
             *end = (*end + 1) % KEY_BUFFER_SIZE;
-            // print key to screen
-            /*match key {
+            match key {
                 DecodedKey::Unicode(character) => {
-                    print!("{}", character);
+                    serial_println!("[Keyboard] Unicode: {}", character);
                 }
                 DecodedKey::RawKey(key) => {
-                    print!("{:?}", key);
+                    serial_println!("[Keyboard] RawKey: {:?}", key);
                 }
                 _ => {}
-            }*/
+            }
         }
     }
 

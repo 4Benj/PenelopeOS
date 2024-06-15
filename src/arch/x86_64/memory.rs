@@ -1,5 +1,7 @@
-use x86_64::{structures::paging::{PageTable, OffsetPageTable, Page, PhysFrame, Mapper, Size4KiB, FrameAllocator}, VirtAddr, PhysAddr};
+use x86_64::{structures::paging::{PageTable, OffsetPageTable, PhysFrame, Size4KiB, FrameAllocator}, VirtAddr, PhysAddr};
 use bootloader::bootinfo::{MemoryMap, MemoryRegionType};
+
+use crate::{println, serial_println};
 
 pub struct EmptyFrameAllocator;
 
@@ -22,6 +24,7 @@ impl BootInfoFrameAllocator {
     /// memory map is valid. The main requirement is that all frames that are marked
     /// as `USABLE` in it are really unused.
     pub unsafe fn init(memory_map: &'static MemoryMap) -> Self {
+        serial_println!("[x86_64] Initializing BootInfoFrameAllocator");
         BootInfoFrameAllocator {
             memory_map,
             next: 0,
@@ -59,6 +62,8 @@ unsafe impl FrameAllocator<Size4KiB> for BootInfoFrameAllocator {
 /// `physical_memory_offset`. Also, this function must be only called once
 /// to avoid aliasing `&mut` references (which is undefined behavior).
 pub unsafe fn init(physical_memory_offset: VirtAddr) -> OffsetPageTable<'static> {
+    serial_println!("[x86_64] Initializing OffsetPageTable.\n\r PHYSICAL_MEMORY_OFFSET: {:?}\n", physical_memory_offset);
+
     let level_4_table = active_level_4_table(physical_memory_offset);
     OffsetPageTable::new(level_4_table, physical_memory_offset)
 }

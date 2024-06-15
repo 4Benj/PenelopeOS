@@ -4,7 +4,7 @@ use pc_keyboard::DecodedKey;
 const MAX_INPUT_SIZE: usize = 256;
 
 pub fn shell() {
-    serial_println!("Starting shell");
+    serial_println!("[Shell] Initializing");
     loop {
         print!("> ");
         let mut buffer = [0u8; MAX_INPUT_SIZE];
@@ -15,14 +15,14 @@ pub fn shell() {
         let command = core::str::from_utf8(&buffer[..input_length]).unwrap_or("");
         execute_command(command);
     }
-    serial_println!("Shell exited");
+    serial_println!("[Shell] Ending");
 }
 
 fn read_line(buffer: &mut [u8]) -> usize {
+    serial_println!("[Shell] Reading Line");
     let mut index = 0;
     loop {
         if let Some(key) = read_key() {
-            serial_println!("Key: {:?}", key);
             match key {
                 DecodedKey::Unicode(character) => match character {
                     '\n' => {
@@ -54,7 +54,7 @@ fn read_line(buffer: &mut [u8]) -> usize {
 }
 
 fn execute_command(command: &str) {
-    serial_println!("Executing command: {}", command);
+    serial_println!("[Shell] Executing command: {}", command);
 
     let mut parts = command.split_whitespace();
     if let Some(cmd) = parts.next() {
