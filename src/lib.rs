@@ -14,13 +14,10 @@ pub mod arch;
 pub mod drivers;
 pub mod shell;
 
-use arch::x86_64::memory;
 use arch::x86_64::interrupts;
 use arch::x86_64::gdt;
 
-use drivers::serial;
-use drivers::vga_buffer;
-
+extern crate alloc;
 
 pub trait Testable {
     fn run(&self) -> ();

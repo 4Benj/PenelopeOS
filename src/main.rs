@@ -8,8 +8,11 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
-
 use penelope::{println, shell::shell};
+
+extern crate alloc;
+
+use alloc::{boxed::Box, vec, vec::Vec, rc::Rc};
 
 entry_point!(kernel_main);
 
@@ -20,10 +23,22 @@ entry_point!(kernel_main);
 fn kernel_main(boot_info: &'static BootInfo) -> ! {
     // this function is the entry point, since the linker looks for a function
     // named `_start` by default
-    use penelope::arch::x86_64::memory::BootInfoFrameAllocator;
+    use x86_64::VirtAddr;
+    use penelope::arch::x86_64::memory::{self, BootInfoFrameAllocator};
+    use penelope::arch::x86_64::allocator;
+
 
     println!("PENELOPE OS {}", VERSION);
     penelope::init();
+
+    let phys_mem_offset = VirtAddr::new(boot_info.physical_memory_offset);
+    let mut mapper = unsafe { memory::init(phys_mem_offset) };
+    let mut frame_allocator = unsafe {
+        BootInfoFrameAllocator::init(&boot_info.memory_map)
+    };
+
+    allocator::init_heap(&mut mapper, &mut frame_allocator)
+        .expect("heap initialization failed");
 
     #[cfg(test)]
     test_main();
