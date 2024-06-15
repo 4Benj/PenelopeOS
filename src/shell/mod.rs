@@ -69,6 +69,10 @@ fn execute_command(command: &str) {
                 println!("Exiting shell.");
                 // Handle exit logic, if needed
             }
+            "panik" => {
+                // Trigger a panic
+                panic!("You triggered a panic!");
+            }
             _ => {
                 println!("Unknown command: {}", cmd);
             }
