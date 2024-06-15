@@ -12,6 +12,7 @@ use bootloader::{entry_point, BootInfo};
 
 pub mod arch;
 pub mod drivers;
+pub mod shell;
 
 use arch::x86_64::memory;
 use arch::x86_64::interrupts;

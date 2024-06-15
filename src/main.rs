@@ -9,7 +9,7 @@ const VERSION: &str = env!("CARGO_PKG_VERSION");
 use core::panic::PanicInfo;
 use bootloader::{BootInfo, entry_point};
 
-use penelope::{println};
+use penelope::{println, shell::shell};
 
 entry_point!(kernel_main);
 
@@ -27,6 +27,8 @@ fn kernel_main(boot_info: &'static BootInfo) -> ! {
 
     #[cfg(test)]
     test_main();
+
+    shell();
 
     println!("It did not crash!");
     penelope::hlt_loop();
